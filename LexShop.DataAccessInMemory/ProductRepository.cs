@@ -22,6 +22,11 @@ namespace LexShop.DataAccessInMemory
                 products = new List<Product>();
             }
         }
+        public void Commit()
+        {
+            cache["products"] = products;
+        }
+
         public void Insert(Product p)
         {
             products.Add(p);
