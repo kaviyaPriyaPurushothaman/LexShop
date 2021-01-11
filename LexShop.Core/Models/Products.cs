@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace LexShop.Core.Models
 {
-    public class Product
+    public class Product:BaseEntity
     {
-        public String Id { get; set;}
         [StringLength(20)]
         [DisplayName("Product Name")]
         public String Name { get; set; }
@@ -20,11 +19,7 @@ namespace LexShop.Core.Models
         public String Category { get; set; }
         public String Image { get; set; }
 
-        public Product()
-        {
-            this.Id = Guid.NewGuid().ToString();
-            
-        }
+       
 
 
 
