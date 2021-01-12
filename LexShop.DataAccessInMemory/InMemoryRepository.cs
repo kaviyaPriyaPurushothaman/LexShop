@@ -4,12 +4,13 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
+using LexShop.Core.Contracts;
 using LexShop.Core.Models;
 
 
 namespace LexShop.DataAccessInMemory
 {
-    public class InMemoryRepository<T> where T : BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
@@ -18,7 +19,7 @@ namespace LexShop.DataAccessInMemory
         {
             className = typeof(T).Name;
             items = cache[className] as List<T>;
-            if (items== null)
+            if (items == null)
             {
                 items = new List<T>();
             }
@@ -41,7 +42,7 @@ namespace LexShop.DataAccessInMemory
             }
             else
             {
-                throw new Exception(className+" not found");
+                throw new Exception(className + " not found");
             }
         }
         public T Find(string Id)
