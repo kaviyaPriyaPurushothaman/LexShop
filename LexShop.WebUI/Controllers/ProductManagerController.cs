@@ -7,6 +7,7 @@ using LexShop.Core.Models;
 using LexShop.DataAccessInMemory;
 using LexShop.Core.ViewModel;
 using LexShop.Core.Contracts;
+using System.IO;
 
 namespace LexShop.WebUI.Controllers
 {
@@ -34,7 +35,7 @@ namespace LexShop.WebUI.Controllers
         }
         [HttpPost]
 
-        public ActionResult Create(Product product)
+        public ActionResult Create(Product product,HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
@@ -42,6 +43,11 @@ namespace LexShop.WebUI.Controllers
             }
             else
             {
+                if(file!=null)
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);
+                }
                 context.Insert(product);
                 context.Commit();
                 return RedirectToAction("Index");
@@ -66,7 +72,7 @@ namespace LexShop.WebUI.Controllers
 
         }
         [HttpPost]
-        public ActionResult Edit(Product product, String Id)
+        public ActionResult Edit(Product product, String Id,HttpPostedFileBase file)
         {
             Product productToEdit = context.Find(Id);
             if (productToEdit == null)
@@ -75,13 +81,18 @@ namespace LexShop.WebUI.Controllers
             }
             else
             {
+
                 if (!ModelState.IsValid)
                 {
                     return View(product);
                 }
+                if(file!=null)
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages") + productToEdit.Image);
+                }
                 productToEdit.Category = product.Category;
                 productToEdit.Description = product.Description;
-                productToEdit.Image = product.Image;
                 productToEdit.Name = product.Name;
                 productToEdit.Price = product.Price;
                 context.Commit();
